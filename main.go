@@ -1,6 +1,6 @@
 package main
 
-import "github.com/trycanal/cli/cmd"
+import "cli/cmd"
 
 func main() {
 	cmd.Execute()

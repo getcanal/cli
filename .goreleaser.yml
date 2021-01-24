@@ -1,0 +1,50 @@
+builds:
+  - main: main.go
+    binary: canal
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+archives:
+  - format_overrides:
+      - goos: windows
+        format: zip
+checksum:
+  name_template: 'checksums.txt'
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+brews:
+  -
+    name: canal-cli
+    goarm: 6
+    tap:
+      owner: trycanal
+      name: homebrew-canal-cli
+    url_template: "https://github.com/trycanal/cli/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+    commit_author:
+      name: canal
+      email: patryk.jeziorowski@gmx.com
+    folder: Formula
+    homepage: "https://trycanal.com"
+    description: "Canal - the all-in-one Customer Platform"
+    skip_upload: false
+scoop:
+  url_template: "https://github.com/trycanal/cli/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+  bucket:
+    owner: trycanal
+    name: scoop-canal-cli
+  commit_author:
+    name: canal
+    email: patryk.jeziorowski@gmx.com
+  homepage: "https://trycanal.com"
+  description: "Canal - the all-in-one Customer Platform"
+  license: MIT
+  persist:
+    - "data"
+    - "config.toml"
