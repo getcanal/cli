@@ -6,8 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var version = "0.0.1" // ci-version-check
-
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
 	Use:   "version",
@@ -19,7 +17,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(version)
+		fmt.Println(GetCurrentVersion())
 	},
 }
 
@@ -35,4 +33,8 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// versionCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func GetCurrentVersion() string {
+	return "0.0.1" // ci-version-check
 }
