@@ -42,6 +42,15 @@ func GetProjectToken(project ProjectName) (auth.ProjectToken, error) {
 	return auth.ProjectToken(token), nil
 }
 
+type Empty struct {
+}
+
+func ClearProjects() error {
+	viper.Set("project", "")
+	viper.Set("projects", map[ProjectName]auth.ProjectToken{})
+	return viper.WriteConfig()
+}
+
 func StoreUserToken(user Email, token auth.UserToken) error {
 	viper.Set("user", user)
 	viper.Set("token", token)

@@ -44,6 +44,12 @@ var loginCmd = &cobra.Command{
 			return
 		}
 
+		err = util.ClearProjects()
+		if err != nil {
+			util.PrintError(err)
+			return
+		}
+
 		color.Cyan("done")
 		fmt.Printf("Logged %s as %s", color.CyanString("in"), color.CyanString("%v", email))
 	},
