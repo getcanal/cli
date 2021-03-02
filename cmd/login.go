@@ -38,7 +38,7 @@ var loginCmd = &cobra.Command{
 			return
 		}
 
-		err = util.StoreUserToken(token)
+		err = util.StoreUserToken(util.Email(email), token)
 		if err != nil {
 			util.PrintError(err)
 			return
