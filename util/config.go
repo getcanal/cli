@@ -42,6 +42,14 @@ func GetProjectToken(project ProjectName) (auth.ProjectToken, error) {
 	return auth.ProjectToken(token), nil
 }
 
+func CurrentProject() (string, error) {
+	project := viper.GetString("project")
+	if project == "" {
+		return "", errors.New("project not selected")
+	}
+	return project, nil
+}
+
 type Empty struct {
 }
 
