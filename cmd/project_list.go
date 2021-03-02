@@ -12,7 +12,7 @@ var projectListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "Shows projects you have access to",
 	Run: func(cmd *cobra.Command, args []string) {
-		token, err := util.GetUserToken()
+		token, err := util.UserToken()
 		if err != nil {
 			util.PrintlnError(err)
 			return

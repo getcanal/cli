@@ -7,3 +7,7 @@ type Credentials struct {
 
 type UserToken string
 type ProjectToken string
+
+type ProjectCredentials struct {
+	Namespace string `json:"namespace"`
+}

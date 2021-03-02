@@ -11,7 +11,7 @@ import (
 const ConfigFileName = "config"
 
 type CanalConfig struct {
-	User     Email                             `yaml:"user"`
+	User     Email                             `yaml:"email"`
 	Project  ProjectName                       `yaml:"project"`
 	Token    auth.UserToken                    `yaml:"token"`
 	Projects map[ProjectName]auth.ProjectToken `json:"projects"`
@@ -50,6 +50,12 @@ func CurrentProject() (string, error) {
 	return project, nil
 }
 
+func UseProject(name ProjectName) error {
+	viper.Set("project", name)
+	err := viper.WriteConfig()
+	return err
+}
+
 type Empty struct {
 }
 
@@ -60,7 +66,7 @@ func ClearProjects() error {
 }
 
 func StoreUserToken(user Email, token auth.UserToken) error {
-	viper.Set("user", user)
+	viper.Set("email", user)
 	viper.Set("token", token)
 	err := viper.WriteConfig()
 	if err != nil {
@@ -69,7 +75,7 @@ func StoreUserToken(user Email, token auth.UserToken) error {
 	return nil
 }
 
-func GetUserToken() (auth.UserToken, error) {
+func UserToken() (auth.UserToken, error) {
 	token := viper.GetString("token")
 	if token == "" {
 		return auth.UserToken(""), errors.New("user authentication token not found in configuration")
@@ -78,7 +84,7 @@ func GetUserToken() (auth.UserToken, error) {
 }
 
 func GetCurrentUser() (string, error) {
-	token := viper.GetString("user")
+	token := viper.GetString("email")
 	if token == "" {
 		return "", errors.New("current user email not found in configuration")
 	}
