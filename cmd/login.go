@@ -24,7 +24,7 @@ var loginCmd = &cobra.Command{
 		fmt.Printf("%v: Welcome back!\n", color.CyanString("Canal"))
 		password, err := passwordPrompt.Run()
 		if err != nil {
-			util.PrintError(err)
+			util.PrintlnError(err)
 			return
 		}
 
@@ -34,19 +34,19 @@ var loginCmd = &cobra.Command{
 			Password: password,
 		})
 		if err != nil {
-			util.PrintError(err)
+			util.PrintlnError(err)
 			return
 		}
 
 		err = util.StoreUserToken(util.Email(email), token)
 		if err != nil {
-			util.PrintError(err)
+			util.PrintlnError(err)
 			return
 		}
 
 		err = util.ClearProjects()
 		if err != nil {
-			util.PrintError(err)
+			util.PrintlnError(err)
 			return
 		}
 
