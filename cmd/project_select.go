@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"canal/util"
+	"cli/util"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )

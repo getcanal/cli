@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"canal/api/auth"
-	api "canal/api/customers"
-	"canal/util"
+	"cli/api/auth"
+	api "cli/api/customers"
+	"cli/util"
 	"fmt"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"

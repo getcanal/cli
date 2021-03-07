@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"canal/api/auth"
-	"canal/util"
+	"cli/api/auth"
+	"cli/util"
 	"fmt"
 	"github.com/fatih/color"
 	"github.com/manifoldco/promptui"

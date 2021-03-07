@@ -1,7 +1,7 @@
 package util
 
 import (
-	"canal/api/auth"
+	"cli/api/auth"
 	"encoding/json"
 	"errors"
 	"fmt"

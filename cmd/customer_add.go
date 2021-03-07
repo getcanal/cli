@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	customersApi "canal/api/customers"
-	"canal/util"
+	customersApi "cli/api/customers"
+	"cli/util"
 	"fmt"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"

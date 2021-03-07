@@ -1,7 +1,7 @@
 package api
 
 import (
-	"canal/util"
+	"cli/util"
 	"encoding/json"
 	"os"
 )
