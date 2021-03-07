@@ -1,7 +1,7 @@
 package api
 
 import (
-	"cli/api/auth"
+	"canal/api/auth"
 	"errors"
 	"github.com/go-resty/resty/v2"
 	"sort"

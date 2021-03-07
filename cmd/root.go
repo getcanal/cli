@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"cli/util"
+	"canal/util"
 	"fmt"
 	"github.com/spf13/cobra"
 	"os"

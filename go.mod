@@ -1,4 +1,4 @@
-module cli
+module canal
 
 go 1.15
 

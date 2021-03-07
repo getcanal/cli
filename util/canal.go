@@ -1,8 +1,8 @@
 package util
 
 import (
-	"cli/api/auth"
-	projectsApi "cli/api/projects"
+	"canal/api/auth"
+	projectsApi "canal/api/projects"
 	"github.com/manifoldco/promptui"
 )
 

@@ -1,7 +1,7 @@
 package util
 
 import (
-	api "cli/api/projects"
+	api "canal/api/projects"
 	"fmt"
 	"github.com/fatih/color"
 )
