@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"cli/util"
+	"canal/util"
 	"fmt"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -17,7 +17,7 @@ var projectCmd = &cobra.Command{
 			fmt.Printf("%v: project not selected\n", color.CyanString("Canal"))
 			return
 		}
-		fmt.Printf("%v: Current project: %v\n", color.CyanString("Canal"), color.CyanString(project))
+		fmt.Printf("%v: Current project: %v\n", color.CyanString("Canal"), color.CyanString(string(project)))
 	},
 }
 

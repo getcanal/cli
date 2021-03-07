@@ -1,93 +1,169 @@
 package util
 
 import (
-	"cli/api/auth"
+	"canal/api/auth"
+	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/spf13/viper"
+	"io/ioutil"
 	"os"
 )
 
 const ConfigFileName = "config"
 
 type CanalConfig struct {
-	User     Email                             `yaml:"email"`
-	Project  ProjectName                       `yaml:"project"`
-	Token    auth.UserToken                    `yaml:"token"`
+	User     Email                             `json:"email"`
+	Project  ProjectName                       `json:"project"`
+	Token    auth.UserToken                    `json:"token"`
 	Projects map[ProjectName]auth.ProjectToken `json:"projects"`
 }
 type Email string
 type ProjectName string
 
-func LoadConfig() (*CanalConfig, error) {
+func Config() (CanalConfig, error) {
 	config := CanalConfig{}
-	err := viper.Unmarshal(&config)
-	return &config, err
+
+	path, err := CanalConfigPath()
+	if err != nil {
+		return config, err
+	}
+
+	bytes, err := ioutil.ReadFile(path)
+	if err != nil {
+		return config, err
+	}
+
+	err = json.Unmarshal(bytes, &config)
+	if err != nil {
+		return config, err
+	}
+
+	if config.Projects == nil {
+		config.Projects = map[ProjectName]auth.ProjectToken{}
+	}
+
+	return config, err
 }
 
-func StoreProjectToken(project ProjectName, token auth.ProjectToken) error {
-	viper.Set("projects."+string(project), token)
-	err := viper.WriteConfig()
+func StoreConfig(config CanalConfig) error {
+	bytes, err := json.Marshal(config)
 	if err != nil {
 		return err
 	}
-	return nil
+
+	path, err := CanalConfigPath()
+	if err != nil {
+		return err
+	}
+
+	return ioutil.WriteFile(path, bytes, os.ModePerm)
 }
 
-func GetProjectToken(project ProjectName) (auth.ProjectToken, error) {
-	token := viper.GetString("projects." + string(project))
+func ProjectToken(project ProjectName) (auth.ProjectToken, error) {
+	config, err := Config()
+	if err != nil {
+		return auth.ProjectToken(""), err
+	}
+
+	token := config.Projects[project]
 	if token == "" {
 		return auth.ProjectToken(""), errors.New("project authentication token not found in configuration")
 	}
+
 	return auth.ProjectToken(token), nil
 }
 
-func CurrentProject() (string, error) {
-	project := viper.GetString("project")
+func StoreProjectToken(project ProjectName, token auth.ProjectToken) error {
+	config, err := Config()
+	if err != nil {
+		return err
+	}
+
+	if config.Projects == nil {
+		projects := map[ProjectName]auth.ProjectToken{}
+		projects[project] = token
+		config.Projects = projects
+	} else {
+		config.Projects[project] = token
+	}
+
+	return StoreConfig(config)
+}
+
+func CurrentProject() (ProjectName, error) {
+	config, err := Config()
+	if err != nil {
+		return "", err
+	}
+
+	project := config.Project
 	if project == "" {
 		return "", errors.New("project not selected")
 	}
+
 	return project, nil
 }
 
 func UseProject(name ProjectName) error {
-	viper.Set("project", name)
-	err := viper.WriteConfig()
-	return err
-}
-
-type Empty struct {
-}
-
-func ClearProjects() error {
-	viper.Set("project", "")
-	viper.Set("projects", map[ProjectName]auth.ProjectToken{})
-	return viper.WriteConfig()
-}
-
-func StoreUserToken(user Email, token auth.UserToken) error {
-	viper.Set("email", user)
-	viper.Set("token", token)
-	err := viper.WriteConfig()
+	config, err := Config()
 	if err != nil {
 		return err
 	}
-	return nil
+
+	config.Project = name
+
+	return StoreConfig(config)
+}
+
+func ClearProjects() error {
+	config, err := Config()
+	if err != nil {
+		return err
+	}
+
+	config.Projects = map[ProjectName]auth.ProjectToken{}
+	config.Project = ""
+
+	return StoreConfig(config)
 }
 
 func UserToken() (auth.UserToken, error) {
-	token := viper.GetString("token")
+	config, err := Config()
+	if err != nil {
+		return auth.UserToken(""), err
+	}
+
+	token := config.Token
 	if token == "" {
 		return auth.UserToken(""), errors.New("user authentication token not found in configuration")
 	}
+
 	return auth.UserToken(token), nil
 }
 
-func GetCurrentUser() (string, error) {
-	token := viper.GetString("email")
+func StoreUserToken(user Email, token auth.UserToken) error {
+	config, err := Config()
+	if err != nil {
+		return err
+	}
+
+	config.User = user
+	config.Token = token
+
+	return StoreConfig(config)
+}
+
+func CurrentUser() (string, error) {
+	config, err := Config()
+	if err != nil {
+		return "", err
+	}
+
+	token := config.Token
 	if token == "" {
 		return "", errors.New("current user email not found in configuration")
 	}
+
 	return "", nil
 }
 
@@ -114,6 +190,11 @@ func InitializeCanalConfig() error {
 		return err
 	}
 
+	err = ioutil.WriteFile(path, []byte("{}"), os.ModePerm)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -122,7 +203,7 @@ func CanalConfigPath() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return path + string(os.PathSeparator) + ConfigFileName + ".yml", nil
+	return path + string(os.PathSeparator) + ConfigFileName + ".json", nil
 }
 
 func CanalDirPath() (string, error) {

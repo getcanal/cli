@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"cli/api/auth"
-	"cli/util"
+	"canal/api/auth"
+	"canal/util"
 	"fmt"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -10,7 +10,7 @@ import (
 
 // projectUseCmd represents the project use <project> command
 var projectUseCmd = &cobra.Command{
-	Use:   "use",
+	Use:   "use <project>",
 	Short: "Use project of your choice",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
