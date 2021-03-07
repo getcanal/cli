@@ -54,12 +54,19 @@ var searchCmd = &cobra.Command{
 				util.PrintlnError(err)
 				return
 			}
+
 			projectToken, err := auth.LoginProject(userToken, string(project))
+			if err != nil {
+				util.PrintlnError(err)
+				return
+			}
+
 			err = util.StoreProjectToken(project, projectToken)
 			if err != nil {
 				util.PrintlnError(err)
 				return
 			}
+
 			token = projectToken
 		}
 
