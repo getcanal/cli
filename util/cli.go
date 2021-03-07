@@ -1,49 +1,28 @@
 package util
 
 import (
-	"canal/api/auth"
-	projectsApi "canal/api/projects"
-	"github.com/manifoldco/promptui"
+	"errors"
+	"strings"
 )
 
-func SelectProject(token auth.UserToken) error {
-	projects, err := projectsApi.ProjectList(token)
-	if err != nil {
-		PrintlnError(err)
-		return nil
-	}
-	var projectNames []string
-	for i := range projects {
-		projectNames = append(projectNames, projects[i].Id)
-	}
+func EmailArg(args []string) (string, error) {
+	return argValue(args, "email")
+}
 
-	PrintlnInfo("please, select a project you have access to")
-	prompt := promptui.Select{
-		Items: projectNames,
-	}
-	_, selectedProject, err := prompt.Run()
-	if err != nil {
-		PrintlnError(err)
-		return nil
-	}
+func NameArg(args []string) (string, error) {
+	return argValue(args, "name")
+}
 
-	projectToken, err := auth.LoginProject(token, selectedProject)
-	if err != nil {
-		PrintlnError(err)
-		return nil
-	}
+func PhoneArg(args []string) (string, error) {
+	return argValue(args, "phone")
+}
 
-	err = StoreProjectToken(ProjectName(selectedProject), projectToken)
-	if err != nil {
-		PrintlnError(err)
-		return nil
+func argValue(args []string, argName string) (string, error) {
+	for i := range args {
+		prefix := argName + ":"
+		if strings.HasPrefix(args[i], prefix) {
+			return strings.TrimPrefix(args[i], prefix), nil
+		}
 	}
-
-	err = UseProject(ProjectName(selectedProject))
-	if err != nil {
-		PrintlnError(err)
-		return nil
-	}
-
-	return nil
+	return "", errors.New(argName + " not provided")
 }
