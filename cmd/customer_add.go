@@ -1,14 +1,11 @@
 package cmd
 
 import (
-	authApi "canal/api/auth"
 	customersApi "canal/api/customers"
-	projectsApi "canal/api/projects"
 	"canal/util"
 	"errors"
 	"fmt"
 	"github.com/fatih/color"
-	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 	"strings"
 )
@@ -35,39 +32,7 @@ var customerAddCmd = &cobra.Command{
 				return
 			}
 
-			projects, err := projectsApi.ProjectList(token)
-			if err != nil {
-				util.PrintlnError(err)
-				return
-			}
-			var projectNames []string
-			for i := range projects {
-				projectNames = append(projectNames, projects[i].Id)
-			}
-
-			util.PrintlnInfo("please, first select a project you have access to")
-			prompt := promptui.Select{
-				Items: projectNames,
-			}
-			_, selectedProject, err := prompt.Run()
-			if err != nil {
-				util.PrintlnError(err)
-				return
-			}
-
-			projectToken, err := authApi.LoginProject(token, selectedProject)
-			if err != nil {
-				util.PrintlnError(err)
-				return
-			}
-
-			err = util.StoreProjectToken(util.ProjectName(selectedProject), projectToken)
-			if err != nil {
-				util.PrintlnError(err)
-				return
-			}
-
-			err = util.UseProject(util.ProjectName(selectedProject))
+			err = util.SelectProject(token)
 			if err != nil {
 				util.PrintlnError(err)
 				return

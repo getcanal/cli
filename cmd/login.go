@@ -50,7 +50,7 @@ var loginCmd = &cobra.Command{
 			return
 		}
 
-		color.Cyan("done")
+		color.Cyan("done! ")
 		fmt.Printf("Logged %s as %s", color.CyanString("in"), color.CyanString("%v", email))
 	},
 }
