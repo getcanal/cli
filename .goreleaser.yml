@@ -34,6 +34,8 @@ brews:
     homepage: "https://trycanal.com"
     description: "Canal - the all-in-one Customer Platform"
     skip_upload: false
+    install: |
+      bin.install "canal"
 scoop:
   url_template: "https://github.com/trycanal/cli/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
   bucket:

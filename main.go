@@ -1,6 +1,6 @@
 package main
 
-import "cli/cmd"
+import "canal/cmd"
 
 func main() {
 	cmd.Execute()
