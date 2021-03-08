@@ -6,10 +6,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// projectUseCmd represents the project select command
-var projectUseCmd = &cobra.Command{
+// projectSelectCmd represents the project select command
+var projectSelectCmd = &cobra.Command{
 	Use:   "select <project>",
-	Short: "Use project of your choice",
+	Short: "Select project of your choice",
 	Run: func(cmd *cobra.Command, args []string) {
 		token, err := util.UserToken()
 		if err != nil {
@@ -28,5 +28,5 @@ var projectUseCmd = &cobra.Command{
 }
 
 func init() {
-	projectCmd.AddCommand(projectUseCmd)
+	projectCmd.AddCommand(projectSelectCmd)
 }
